@@ -1,0 +1,15 @@
+[submodule "submodules/reps"]
+	path = submodules/reps
+	url = git@github.com:openrobotics/reps.git
+[submodule "submodules/kmom88-rosdistro"]
+	path = submodules/kmom88-rosdistro
+	url = git@github.com:KmoM88/rosdistro.git
+[submodule "submodules/kmom88-rosinstall_generator"]
+	path = submodules/kmom88-rosinstall_generator
+	url = git@github.com:KmoM88/rosinstall_generator.git
+[submodule "submodules/kmom88-ros_buildfarm"]
+	path = submodules/kmom88-ros_buildfarm
+	url = git@github.com:KmoM88/ros_buildfarm.git
+[submodule "submodules/kmom88-rosdep"]
+	path = submodules/kmom88-rosdep
+	url = git@github.com:KmoM88/rosdep.git
