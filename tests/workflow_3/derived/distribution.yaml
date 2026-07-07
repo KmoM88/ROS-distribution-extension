@@ -1,0 +1,24 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu: [noble, oracular]
+extends:
+  - distro_name: base
+    extension_method: binary_import
+dependencies:
+  - rosdep_sources_list_urls:
+      - https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+    rosdep_minimum_target_platforms:
+      - ubuntu:noble
+      - debian:bookworm
+repositories:
+  new_derived_repo:
+    doc:
+      type: git
+      url: https://github.com/ros/new_derived_repo.git
+      version: master
+    status: maintained
+tags:
+  - derived
+type: distribution
+version: 3

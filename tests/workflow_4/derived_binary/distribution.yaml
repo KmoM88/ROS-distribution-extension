@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu: [noble]
+extends:
+  - distro_name: base
+    extension_method: binary_import
+repositories:
+  new_package:
+    doc:
+      type: git
+      url: https://github.com/ros/new_package.git
+      version: master
+    release:
+      packages:
+        - new_package
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/new_package-release.git
+      version: 1.0.0
+    status: maintained
+tags:
+  - derived_binary
+type: distribution
+version: 3

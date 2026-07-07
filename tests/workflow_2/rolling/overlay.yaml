@@ -1,0 +1,30 @@
+%YAML 1.1
+---
+repositories:
+  ros_tutorials:
+    doc:
+      type: git
+      url: https://github.com/ros/ros_tutorials.git
+      version: rolling-devel
+    release:
+      packages:
+        - turtlesim
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/ros_tutorials-release.git
+      version: 0.3.9
+    source:
+      type: git
+      url: https://github.com/ros/ros_tutorials.git
+      version: rolling-devel
+    status: developed
+  new_repo:
+    doc:
+      type: git
+      url: https://github.com/ros/new_repo.git
+      version: master
+    status: maintained
+tags:
+  - rolling
+type: distribution
+version: 2

@@ -1,0 +1,12 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu: [noble]
+extends:
+  - distro_name: cyclic
+    extension_method: binary_import
+repositories: {}
+tags:
+  - cyclic
+type: distribution
+version: 3

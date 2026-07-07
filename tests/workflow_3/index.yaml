@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+distributions:
+  base:
+    distribution:
+      - base/distribution.yaml
+  derived:
+    distribution:
+      - derived/distribution.yaml
+  cyclic:
+    distribution:
+      - cyclic/distribution.yaml
+type: index
+version: 3

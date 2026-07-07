@@ -1,0 +1,14 @@
+%YAML 1.1
+---
+distributions:
+  base:
+    distribution:
+      - base/distribution.yaml
+  derived_binary:
+    distribution:
+      - derived_binary/distribution.yaml
+  derived_source:
+    distribution:
+      - derived_source/distribution.yaml
+type: index
+version: 3
