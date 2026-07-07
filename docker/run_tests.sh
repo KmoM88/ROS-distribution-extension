@@ -30,6 +30,12 @@ echo 'Running Workflow 4 Python Package Name Mapping Test...'
 echo 'Running internal rosdistro pytest suite...'
 (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest test/)
 
+echo 'Running internal rosdep pytest suite...'
+(export PATH=/workspace/.venv/bin:$PATH && cd submodules/kmom88-rosdep && ../../.venv/bin/pytest test/)
+
+echo 'Running internal ros_buildfarm pytest suite...'
+(cd submodules/kmom88-ros_buildfarm && ../../.venv/bin/pytest test/test_repo.py test/test_create_workspace_archive.py test/test_package_naming.py)
+
 echo 'Generating local Cache for Workflow 2...'
 .venv/bin/rosdistro_build_cache file:///workspace/tests/workflow_2/index.yaml rolling
 

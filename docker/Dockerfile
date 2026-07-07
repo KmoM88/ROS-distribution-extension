@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     sudo \
+    ruby \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up the workspace directory
@@ -26,9 +27,9 @@ RUN find submodules/ -name .git -type f -delete
 RUN python3 -m venv .venv \
     && .venv/bin/pip install --upgrade pip \
     && .venv/bin/pip install -e submodules/kmom88-rosdistro[test] \
-    && .venv/bin/pip install -e submodules/kmom88-rosdep \
+    && .venv/bin/pip install -e submodules/kmom88-rosdep[test] \
     && .venv/bin/pip install -e submodules/kmom88-rosinstall_generator \
-    && .venv/bin/pip install -e submodules/kmom88-ros_buildfarm
+    && .venv/bin/pip install -e submodules/kmom88-ros_buildfarm[test]
 
 # Initialize rosdep system-wide inside the container
 RUN .venv/bin/rosdep init || true
