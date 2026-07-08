@@ -30,17 +30,17 @@ The following fork repositories are registered as git submodules and checked out
 
 ## 3. Docker Environment & Local Isolation
 To protect the host operating system from local configuration contamination (such as writing to `/etc/ros/rosdep` or editing python system directories), we developed a self-contained container:
-- **Dockerfile**: [docker/Dockerfile](file:///home/fede/github/kmom88/ROS-distribution-extension/docker/Dockerfile)
+- **Dockerfile**: [docker/Dockerfile](../docker/Dockerfile)
 - **Base Image**: `ubuntu:noble` (Python 3.12, satisfying REP-2000 requirements).
-- **Execution Script**: [docker/run_tests.sh](file:///home/fede/github/kmom88/ROS-distribution-extension/docker/run_tests.sh)
+- **Execution Script**: [docker/run_tests.sh](../docker/run_tests.sh)
 - **Editable Installation**: Inside the container, all submodules are installed in editable mode (`pip install -e`) within an isolated virtual environment (`.venv`) to ensure changes are immediately reflected across other dependent submodules.
 
 ---
 
 ## 4. Verification Results
 The mock baseline files placed under `tests/workflow_1/` consist of:
-- A version 3 index: [tests/workflow_1/index.yaml](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_1/index.yaml)
-- A version 2 distribution: [tests/workflow_1/rolling/distribution.yaml](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_1/rolling/distribution.yaml)
+- A version 3 index: [tests/workflow_1/index.yaml](../tests/workflow_1/index.yaml)
+- A version 2 distribution: [tests/workflow_1/rolling/distribution.yaml](../tests/workflow_1/rolling/distribution.yaml)
 
 Verification command run in the container:
 ```bash

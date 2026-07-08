@@ -11,14 +11,14 @@ The purpose of Workflow 2 was to verify that the unmodified ROS toolchain correc
 
 ## 2. Segregated Test Configurations
 A dedicated directory `tests/workflow_2/` was structured to represent an overlay layout:
-- **Base Distribution**: [tests/workflow_2/rolling/distribution.yaml](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_2/rolling/distribution.yaml) (declares `ros_tutorials` repository with `turtlesim` at version `0.3.9` and status `maintained`).
-- **Overlay File**: [tests/workflow_2/rolling/overlay.yaml](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_2/rolling/overlay.yaml) (overrides `ros_tutorials` status to `developed` and introduces a new repository `new_repo`).
-- **Overlay Index**: [tests/workflow_2/index.yaml](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_2/index.yaml) (combines both files).
+- **Base Distribution**: [tests/workflow_2/rolling/distribution.yaml](../tests/workflow_2/rolling/distribution.yaml) (declares `ros_tutorials` repository with `turtlesim` at version `0.3.9` and status `maintained`).
+- **Overlay File**: [tests/workflow_2/rolling/overlay.yaml](../tests/workflow_2/rolling/overlay.yaml) (overrides `ros_tutorials` status to `developed` and introduces a new repository `new_repo`).
+- **Overlay Index**: [tests/workflow_2/index.yaml](../tests/workflow_2/index.yaml) (combines both files).
 
 ---
 
 ## 3. Local Verification Results
-The test script [tests/workflow_2/test_workflow_2.py](file:///home/fede/github/kmom88/ROS-distribution-extension/tests/workflow_2/test_workflow_2.py) was executed inside the container:
+The test script [tests/workflow_2/test_workflow_2.py](../tests/workflow_2/test_workflow_2.py) was executed inside the container:
 ```bash
 .venv/bin/python3 tests/workflow_2/test_workflow_2.py
 ```

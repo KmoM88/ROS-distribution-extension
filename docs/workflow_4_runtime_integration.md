@@ -30,6 +30,12 @@ In [gbpdistro_support.py](../submodules/kmom88-rosdep/src/rosdep2/gbpdistro_supp
 * **For `source_rebuild`**:
   Rebuilt packages are renamed to target the derived distribution name: `ros-{derived_distro}-{package}`.
 
+### 3.2. `superflore` ebuild categories
+In [ebuild.py](../submodules/kmom88-superflore/superflore/generators/ebuild/ebuild.py) and [gen_packages.py](../submodules/kmom88-superflore/superflore/generators/ebuild/gen_packages.py):
+* Transitioned internal ebuild dependency tracker lists to dicts.
+* Resolved `origin_distro` from the `rosdistro` repository structure dynamically and passed it to the ebuild generator.
+* Generated correct Gentoo Portage categories as `ros-${dep_distro}/${pkg}`.
+
 ---
 
 ## 4. Segregated Test Configs
@@ -55,3 +61,7 @@ docker run --rm ros-distro-ext-test .venv/bin/python3 tests/workflow_4/test_work
    * Assert `new_package` (defined locally) resolves to `ros-derived-binary-new-package`.
 2. **derived_source (source_rebuild)**:
    * Assert `turtlesim` (rebuilt in derived distro) resolves to `ros-derived-source-turtlesim`.
+3. **bloom release generator**:
+   * Assert `bloom`'s `resolve_rosdep_key` resolves `turtlesim` to `['ros-base-turtlesim']` and `new_package` to `['ros-derived-binary-new-package']`.
+4. **superflore ebuild generator**:
+   * Assert `superflore` parses ebuild dependency mappings and formats them as `ros-base/turtlesim` and `ros-derived_binary/new_package` respectively.
