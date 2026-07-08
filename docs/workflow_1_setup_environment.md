@@ -21,6 +21,8 @@ The development forks of the critical tools were successfully added and initiali
 | `rosdep` | `submodules/kmom88-rosdep` |
 | `rosinstall_generator` | `submodules/kmom88-rosinstall_generator` |
 | `ros_buildfarm` | `submodules/kmom88-ros_buildfarm` |
+| `bloom` | `submodules/kmom88-bloom` |
+| `superflore` | `submodules/kmom88-superflore` |
 
 ### Verification of Submodule Commits
 To check the current Checked-out status and commits:
@@ -46,7 +48,9 @@ To maintain complete environment isolation and prevent package contamination on 
        && .venv/bin/pip install -e submodules/kmom88-rosdistro \
        && .venv/bin/pip install -e submodules/kmom88-rosdep \
        && .venv/bin/pip install -e submodules/kmom88-rosinstall_generator \
-       && .venv/bin/pip install -e submodules/kmom88-ros_buildfarm
+       && .venv/bin/pip install -e submodules/kmom88-ros_buildfarm \
+       && .venv/bin/pip install -e submodules/kmom88-bloom \
+       && .venv/bin/pip install -e submodules/kmom88-superflore
    ```
 
 2. **Run Tests Script**:

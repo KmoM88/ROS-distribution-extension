@@ -13,3 +13,9 @@
 [submodule "submodules/kmom88-rosdep"]
 	path = submodules/kmom88-rosdep
 	url = git@github.com:KmoM88/rosdep.git
+[submodule "submodules/kmom88-bloom"]
+	path = submodules/kmom88-bloom
+	url = git@github.com:KmoM88/bloom.git
+[submodule "submodules/kmom88-superflore"]
+	path = submodules/kmom88-superflore
+	url = git@github.com:KmoM88/superflore.git

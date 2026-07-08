@@ -16,6 +16,8 @@ To ensure modifications to tool forks are tracked properly, the following featur
 * **rosdep Submodule**: `submodules/kmom88-rosdep` -> Branch: `feature/rep-2015-tool-integration`
 * **rosinstall_generator Submodule**: `submodules/kmom88-rosinstall_generator` -> Branch: `feature/rep-2015-tool-integration`
 * **ros_buildfarm Submodule**: `submodules/kmom88-ros_buildfarm` -> Branch: `feature/rep-2015-tool-integration`
+* **bloom Submodule**: `submodules/kmom88-bloom` -> Branch: `feature/rep-2015-tool-integration`
+* **superflore Submodule**: `submodules/kmom88-superflore` -> Branch: `feature/rep-2015-tool-integration`
 
 ---
 

@@ -19,6 +19,8 @@ This document details the development workflows, test specifications, and valida
    * `rosinstall_generator`
    * `ros_buildfarm`
    * `rosdep`
+   * `bloom`
+   * `superflore`
 2. **Submodule Setup**: Add and initialize these forks under `submodules/kmom88-<tool_name>`.
 3. **Docker Environment Setup**:
    * Define the testing `docker/Dockerfile` (based on `ubuntu:noble`) that creates an isolated virtual environment and installs submodules in editable mode.
