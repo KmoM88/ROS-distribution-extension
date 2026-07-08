@@ -2,6 +2,12 @@
 
 This document details the development workflows, test specifications, and validation plans for implementing and verifying **REP-2015: ROS Distribution Extensions** in this workspace.
 
+## Feasibility & Implementation Assessment Goal
+The primary objective of this project is to evaluate the implementability of REP-2015 across the ROS infrastructure ecosystem. This involves:
+- Identifying edge cases and functional limitations in the proposed specification.
+- Extending and modifying the upstream forks (`rosdistro`, `rosdep`, `rosinstall_generator`, `ros_buildfarm`, `bloom`, and `superflore`) to support the version 3 distribution schema.
+- Documenting the advances made in each fork and compiling a final report that highlights areas that are particularly difficult to implement or that clash with the underlying philosophy of the existing tools.
+
 > [!IMPORTANT]
 > **Branching & Container Policies**:
 > 1. All tool testing, dry-runs, and execution must run in the isolated Docker container (`ros-distro-ext-test`).
@@ -138,3 +144,23 @@ This document details the development workflows, test specifications, and valida
 ### Verification Criteria
 * Cache files for derived distributions are minimal and contain no duplicated base package metadata.
 * Dependency resolution runs successfully using the chained caches.
+
+---
+
+## Workflow 7: Feasibility Report & Downstream Integration Assessment
+**Agent**: Toolchain Integrator Agent  
+**Purpose**: Document all advances, edge cases, implementation difficulties, and philosophical conflicts encountered during integration with the downstream ROS release/packaging toolchain.
+
+### Tasks
+1. **Analyze Downstream Tools**:
+   * Verify how `bloom` handles package releasing and key resolution under derived distribution environments.
+   * Verify how `superflore` generates ebuilds, bitbake recipes, and nix expressions for packages targeting derived distributions, addressing dependency namespace issues.
+2. **Document Implementation Roadblocks**:
+   * Identify features of REP-2015 that are difficult to implement without major architectural refactoring of the parent ROS infrastructure codebases.
+   * Detail any philosophical differences (e.g. how tools assume a single distribution prefix, or how they handle isolated package builds).
+3. **Compile Final Summary**:
+   * Write a comprehensive report detailing the status of each fork, the implementation completeness, and recommendations for standardizing REP-2015 version 3 distribution files.
+
+### Verification Criteria
+* A final markdown document detailing the feasibility analysis and advances is saved in the workspace.
+
