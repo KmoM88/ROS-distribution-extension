@@ -33,6 +33,9 @@ echo 'Running internal rosdistro pytest suite...'
 echo 'Running internal rosdep pytest suite...'
 (export PATH=/workspace/.venv/bin:$PATH && cd submodules/kmom88-rosdep && ../../.venv/bin/pytest test/)
 
+echo 'Running internal rosinstall_generator pytest suite...'
+(cd submodules/kmom88-rosinstall_generator && ../../.venv/bin/pytest test/)
+
 echo 'Running internal ros_buildfarm pytest suite...'
 (cd submodules/kmom88-ros_buildfarm && ../../.venv/bin/pytest test/test_repo.py test/test_create_workspace_archive.py test/test_package_naming.py)
 
