@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu: [noble]
+repositories:
+  turtlesim_repo:
+    release:
+      packages:
+        - turtlesim
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/ros_tutorials-release.git
+      version: 0.3.9
+  std_msgs_repo:
+    release:
+      packages:
+        - std_msgs
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/std_msgs-release.git
+      version: 1.0.0
+type: distribution
+version: 3

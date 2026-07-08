@@ -23,15 +23,18 @@ COPY . /workspace
 # Remove broken .git files from submodules to allow git commands (e.g. ls-remote) inside the container
 RUN find submodules/ -name .git -type f -delete
 
+ENV ROSDEP_LOCAL_DEV=true
+
 # Create and activate python virtual environment, then install submodules
 RUN python3 -m venv .venv \
     && .venv/bin/pip install --upgrade pip \
-    && .venv/bin/pip install -e submodules/kmom88-rosdistro[test] \
-    && .venv/bin/pip install -e submodules/kmom88-rosdep[test] \
-    && .venv/bin/pip install -e submodules/kmom88-rosinstall_generator \
-    && .venv/bin/pip install -e submodules/kmom88-ros_buildfarm[test] \
-    && .venv/bin/pip install -e submodules/kmom88-bloom[test] \
-    && .venv/bin/pip install -e submodules/kmom88-superflore
+    && .venv/bin/pip install \
+        -e submodules/kmom88-rosdistro[test] \
+        -e submodules/kmom88-rosdep[test] \
+        -e submodules/kmom88-rosinstall_generator \
+        -e submodules/kmom88-ros_buildfarm[test] \
+        -e submodules/kmom88-bloom[test] \
+        -e submodules/kmom88-superflore
 
 # Initialize rosdep system-wide inside the container
 RUN .venv/bin/rosdep init || true

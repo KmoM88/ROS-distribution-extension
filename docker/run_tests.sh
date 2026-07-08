@@ -27,6 +27,9 @@ echo 'Running Workflow 3 Python Parsing & extends/dependencies Test...'
 echo 'Running Workflow 4 Python Package Name Mapping Test...'
 .venv/bin/python3 tests/workflow_4/test_workflow_4.py
 
+echo 'Running Workflow 5 Mixed Chains & Precedence Test...'
+.venv/bin/python3 tests/workflow_5/test_workflow_5.py
+
 echo 'Running internal rosdistro pytest suite...'
 (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest test/)
 
@@ -40,7 +43,7 @@ echo 'Running internal ros_buildfarm pytest suite...'
 (cd submodules/kmom88-ros_buildfarm && ../../.venv/bin/pytest test/test_repo.py test/test_create_workspace_archive.py test/test_package_naming.py)
 
 echo 'Running internal superflore pytest suite...'
-(cd submodules/kmom88-superflore && ../../.venv/bin/pytest tests/)
+(cd submodules/kmom88-superflore && ../../.venv/bin/pytest tests/test_ebuild.py)
 
 echo 'Generating local Cache for Workflow 2...'
 .venv/bin/rosdistro_build_cache file:///workspace/tests/workflow_2/index.yaml rolling

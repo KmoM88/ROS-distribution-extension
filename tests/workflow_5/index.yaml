@@ -1,0 +1,25 @@
+%YAML 1.1
+---
+distributions:
+  root:
+    distribution:
+      - root/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
+  parent_a:
+    distribution:
+      - parent_a/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
+  parent_b:
+    distribution:
+      - parent_b/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
+  child:
+    distribution:
+      - child/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
+type: index
+version: 4

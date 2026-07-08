@@ -1,0 +1,18 @@
+%YAML 1.1
+---
+extends:
+  - distro_name: root
+    extension_method: source_rebuild
+release_platforms:
+  ubuntu: [noble]
+repositories:
+  collision_repo:
+    release:
+      packages:
+        - collision_pkg
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/collision-release.git
+      version: 2.0.0
+type: distribution
+version: 3
