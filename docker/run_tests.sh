@@ -39,6 +39,9 @@ echo 'Running internal rosinstall_generator pytest suite...'
 echo 'Running internal ros_buildfarm pytest suite...'
 (cd submodules/kmom88-ros_buildfarm && ../../.venv/bin/pytest test/test_repo.py test/test_create_workspace_archive.py test/test_package_naming.py)
 
+echo 'Running internal superflore pytest suite...'
+(cd submodules/kmom88-superflore && ../../.venv/bin/pytest tests/)
+
 echo 'Generating local Cache for Workflow 2...'
 .venv/bin/rosdistro_build_cache file:///workspace/tests/workflow_2/index.yaml rolling
 

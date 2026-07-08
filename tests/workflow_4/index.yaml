@@ -4,11 +4,17 @@ distributions:
   base:
     distribution:
       - base/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
   derived_binary:
     distribution:
       - derived_binary/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
   derived_source:
     distribution:
       - derived_source/distribution.yaml
+    distribution_type: ros2
+    python_version: 3
 type: index
-version: 3
+version: 4
