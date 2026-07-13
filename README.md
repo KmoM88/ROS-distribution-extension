@@ -15,6 +15,7 @@ We successfully extended and validated the ROS distribution overlay infrastructu
 | **Workflow 4** | Integrated package name mapping and category translation across boundary layers for binary and source distribution methods in `rosdep`, `bloom`, and `superflore`. | [Report](docs/report_workflow_4.md) \| [Tests](tests/workflow_4/) |
 | **Workflow 5** | Enabled multiple parent inheritance, DFS post-order precedence ordering, collision warning checks, and namespace origin re-mapping in `source_rebuild` chains. | [Report](docs/report_workflow_5.md) \| [Tests](tests/workflow_5/) |
 | **Workflow 6** | Implemented minimal disk cache compilation in `rosdistro_build_cache` and recursive in-memory chained cache resolution in cache loaders. | [Report](docs/report_workflow_6.md) \| [Tests](tests/workflow_6/) |
+| **Workflow 7** | Built a fully automated real-world case study extending the ROS 2 Lyrical distribution to validate all parser, precedence, naming, and chained cache features combined. | [Report](docs/report_workflow_7.md) \| [Tests](tests/workflow_7/) |
 
 ---
 
@@ -45,7 +46,7 @@ bash docker/run_tests.sh
 
 This script will:
 1. Build the isolated testing container (`ros-distro-ext-test`).
-2. Run all six integration workflow verification test scripts (under `tests/`).
+2. Run all seven integration workflow verification test scripts (under `tests/`).
 3. Run the pytest suites for all modified submodules (`rosdistro`, `rosdep`, `rosinstall_generator`, `ros_buildfarm`, `superflore`).
 4. Output the results to the terminal.
 

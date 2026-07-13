@@ -146,7 +146,23 @@ The primary objective of this project is to evaluate the implementability of REP
 
 ---
 
-## Workflow 7: Feasibility Report & Downstream Integration Assessment
+## Workflow 7: Automated Lyrical Luth (Lyrical) Integration Testing
+**Agent**: Toolchain Integrator Agent  
+**Purpose**: Validate multiple inheritance, precedence, collision warning checks, prefix name translations, and chained cache resolution in a single fully automated integration test utilizing real ROS 2 package definitions on top of the LTS distribution Lyrical.
+
+### Tasks
+1. **Index & Schema Configuration**: Setup a v4 index file and distribution overlay files for `lyrical`, `parent_gazebo`, `derived_binary`, and `derived_source` using real public package names and git repositories (`common_interfaces`, `ros_tutorials`, `gazebo_ros_pkgs`).
+2. **Automated Test Script**: Write `tests/workflow_7/test_workflow_7.py` to trigger on-disk cache compilation, assert minimal cache outputs, execute chained cache loading in memory, run isolated `rosdep update`, and assert package resolution prefixes.
+3. **Downstream Clients Invocation**: Execute `bloom`, `superflore`, `rosinstall_generator`, and `ros_buildfarm` APIs in the script to verify they resolve dependencies across the chained cache boundaries and apply the correct name transforms.
+
+### Verification Criteria
+- All tests execute and pass successfully inside the isolated Docker container.
+- Output warnings and duplicate declarations are captured and verified.
+- Cache compilation produces lightweight files, and memory loading chains parent caches recursively.
+
+---
+
+## Workflow 8: Feasibility Report & Downstream Integration Assessment
 **Agent**: Toolchain Integrator Agent  
 **Purpose**: Document all advances, edge cases, implementation difficulties, and philosophical conflicts encountered during integration with the downstream ROS release/packaging toolchain.
 

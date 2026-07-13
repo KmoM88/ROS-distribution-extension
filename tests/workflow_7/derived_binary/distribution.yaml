@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu:
+    - Resolutes
+extends:
+  - distro_name: parent_gazebo
+    extension_method: binary_import
+  - distro_name: lyrical
+    extension_method: binary_import
+repositories:
+  ros_tutorials_derived:
+    release:
+      packages:
+        - roscpp_tutorials
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/ros_tutorials-release.git
+      version: 0.3.9
+    status: maintained
+type: distribution
+version: 3
