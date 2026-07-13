@@ -1,6 +1,6 @@
 # ROS Distribution Extension (REP-2015 Case Study)
 
-This repository serves as a validation test-bed and case study for [REP-2015 (ROS Distribution Extensions)](https://github.com/KmoM88/reps/blob/feature/rep-2015/rep-2015.rst). It implements the proposed extends/overlay specification across the primary ROS packaging, release, and dependency management tools.
+This repository serves as a validation test-bed and case study for [REP-2015 (ROS Distribution Extensions)](https://github.com/openrobotics/reps/blob/rosdistro_extension/_posts/rep-2015.md). It implements the proposed extends/overlay specification across the primary ROS packaging, release, and dependency management tools.
 
 ---
 
