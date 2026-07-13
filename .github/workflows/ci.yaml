@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-tests:
+    name: Run Containerized Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Execute Automated Tests
+        run: |
+          bash docker/run_tests.sh
