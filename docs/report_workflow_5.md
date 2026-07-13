@@ -42,8 +42,35 @@ The main objective of Workflow 5 was to extend the Version 3 distribution parser
   - **Child (multi-parent)**: [tests/workflow_5/child/distribution.yaml](../tests/workflow_5/child/distribution.yaml) (Extends both parents).
 - **Test Script** ([test_workflow_5.py](../tests/workflow_5/test_workflow_5.py)):
   - Asserts that `collision_repo` resolves to version `1.0.0` (matching the first parent, `parent_a`).
-  - Asserts that all warnings for repository and package collisions are captured in stdout.
+  - Asserts that all warnings for repository and package collisions are captured in stdout/stderr.
   - Asserts `rosdep` package resolution (resolving `std_msgs` to `ros-root-std-msgs` and `collision_pkg` to `ros-parent-a-collision-pkg`).
+
+```mermaid
+graph TD
+    subgraph "Root Distribution (root)"
+        Root["std_msgs<br/>turtlesim"]
+    end
+
+    subgraph "Parent A (parent_a)"
+        ParentA["collision_pkg: 1.0.0"]
+    end
+
+    subgraph "Parent B (parent_b)"
+        ParentB["collision_pkg: 2.0.0<br/>std_msgs<br/>turtlesim"]
+    end
+
+    subgraph "Child Distribution (child)"
+        Child["child_pkg"]
+    end
+
+    ParentA -- "extends (binary_import)" --> Root
+    ParentB -- "extends (binary_import)" --> Root
+    Child -- "extends (binary_import)" --> ParentA
+    Child -- "extends (source_rebuild)" --> ParentB
+
+    CollisionWarning["WARNING: Collision detected for collision_pkg,<br/>std_msgs, and turtlesim.<br/>Using Parent A definitions (first declared)."]
+    Child -.-> CollisionWarning
+```
 
 ---
 

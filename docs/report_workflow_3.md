@@ -30,10 +30,51 @@ All parsing, resolution, and warning verification logics were implemented in the
 
 ## 3. Local Verification Results
 We verified the behavior of the modified parser inside the Docker container using a test script [tests/workflow_3/test_workflow_3.py](../tests/workflow_3/test_workflow_3.py):
-- **Cycle Assertions**: Confirmed that `CircularInheritanceError` is raised when trying to parse `cyclic` distribution.
+
+### A. Successful Inheritance & Platform Validation
+- **Package Merging**: Confirmed that parent packages (`ros_tutorials` from `base` distro) are correctly merged into the derived distribution file layout.
 - **Platform Warning**: Confirmed that loading `derived` distribution output the correct warning:
   `WARNING: Target platform 'ubuntu:oracular' specified in derived distribution is not supported by base distribution.`
-- **Package Merging**: Confirmed that parent packages (`ros_tutorials` from `base` distro) are correctly merged into the derived distribution file layout.
+
+```mermaid
+graph TD
+    subgraph "Base Distribution (base)"
+        BasePlatforms["release_platforms:<br/>ubuntu: noble"]
+        BaseRepos["repositories:<br/>- ros_tutorials"]
+    end
+
+    subgraph "Derived Distribution (derived)"
+        DerivedPlatforms["release_platforms:<br/>ubuntu: noble, oracular"]
+        DerivedRepos["repositories:<br/>- new_derived_repo"]
+    end
+
+    Derived -- "extends (binary_import)" --> Base
+    
+    PlatformWarning["WARNING:<br/>ubuntu:oracular is not supported by base"]
+    MergedState["Merged State (derived):<br/>- new_derived_repo (local)<br/>- ros_tutorials (inherited)"]
+    
+    DerivedPlatforms -.-> PlatformWarning
+    BasePlatforms -.-> PlatformWarning
+    BaseRepos --> MergedState
+    DerivedRepos --> MergedState
+```
+
+### B. Circular Inheritance Loop Detection
+- **Cycle Assertions**: Confirmed that `CircularInheritanceError` is raised when trying to parse `cyclic` distribution.
+
+```mermaid
+graph TD
+    subgraph "Cyclic Distribution Chain"
+        CyclicA["cyclic_a"]
+        CyclicB["cyclic_b"]
+    end
+
+    CyclicA -- "extends" --> CyclicB
+    CyclicB -- "extends" --> CyclicA
+    
+    CyclicA -.-> Loop["Loop Detected!"]
+    Loop --> RaiseErr["raise CircularInheritanceError"]
+```
 
 ---
 

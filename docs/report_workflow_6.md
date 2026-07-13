@@ -41,6 +41,33 @@ The main objective of Workflow 6 was to implement in-memory chained cache resolu
   - Loads the distribution in memory and asserts that the chained resolver merges `turtlesim` in.
   - Calls `rosinstall_generator` to verify package resolution across boundaries.
 
+```mermaid
+graph TD
+    subgraph "On-Disk Storage (Lightweight Caches)"
+        BaseCacheFile["base-cache.yaml<br/>(Contains: turtlesim XML)"]
+        DerivedCacheFile["derived-cache.yaml<br/>(Contains: roscpp_tutorials XML)"]
+    end
+
+    subgraph "In-Memory Resolution (Chained Cache Loading)"
+        direction TB
+        Loader["1. Load derived-cache.yaml"]
+        ExtendsCheck{"2. Extends base?"}
+        ParentLoader["3. Fetch base-cache.yaml"]
+        MergeData["4. Merge package XMLs and metadata"]
+        MergedCache["Merged Cache in memory:<br/>- roscpp_tutorials XML (derived)<br/>- turtlesim XML (base)"]
+        
+        Loader --> ExtendsCheck
+        ExtendsCheck -- "Yes" --> ParentLoader
+        ParentLoader --> MergeData
+        MergeData --> MergedCache
+    end
+
+    DerivedCacheFile --> Loader
+    BaseCacheFile --> ParentLoader
+    
+    MergedCache --> Consumer["5. Downstream Tools (e.g. rosinstall_generator)<br/>Resolves turtlesim and roscpp_tutorials"]
+```
+
 ---
 
 ## 4. Verification Results
