@@ -48,3 +48,11 @@ This script will:
 2. Run all six integration workflow verification test scripts (under `tests/`).
 3. Run the pytest suites for all modified submodules (`rosdistro`, `rosdep`, `rosinstall_generator`, `ros_buildfarm`, `superflore`).
 4. Output the results to the terminal.
+
+---
+
+## Documentation & Analysis
+Detailed analysis, roadmap specifications, and feasibility reports are available under the `docs/` folder:
+- [Roadmap & Test Specifications](docs/workflows_roadmap.md)
+- [REP-2015 Case Study & Final Summary Report](docs/rep_2015_edge_cases_and_adoption.md)
+
