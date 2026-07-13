@@ -1,0 +1,13 @@
+%YAML 1.1
+# ROS index file
+# see REP 153: http://ros.org/reps/rep-0153.html
+---
+distributions:
+  base:
+    distribution: [base/distribution.yaml]
+    distribution_cache: base-cache.yaml
+  derived:
+    distribution: [derived/distribution.yaml]
+    distribution_cache: derived-cache.yaml
+type: index
+version: 4

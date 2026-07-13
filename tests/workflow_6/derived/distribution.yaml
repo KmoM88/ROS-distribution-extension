@@ -1,0 +1,32 @@
+%YAML 1.1
+---
+release_platforms:
+  ubuntu: [noble]
+extends:
+  - distro_name: base
+    extension_method: binary_import
+dependencies:
+  - rosdep_sources_list_urls:
+      - https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+    rosdep_minimum_target_platforms:
+      - ubuntu:noble
+repositories:
+  ros_tutorials_derived:
+    doc:
+      type: git
+      url: https://github.com/ros/ros_tutorials.git
+      version: rolling-devel
+    release:
+      packages:
+        - roscpp_tutorials
+      tags:
+        release: release/{package}/{version}
+      url: https://github.com/ros-gbp/ros_tutorials-release.git
+      version: 0.3.9
+    source:
+      type: git
+      url: https://github.com/ros/ros_tutorials.git
+      version: rolling-devel
+    status: maintained
+type: distribution
+version: 3

@@ -30,6 +30,9 @@ echo 'Running Workflow 4 Python Package Name Mapping Test...'
 echo 'Running Workflow 5 Mixed Chains & Precedence Test...'
 .venv/bin/python3 tests/workflow_5/test_workflow_5.py
 
+echo 'Running Workflow 6 Chained Cache Resolution Test...'
+.venv/bin/python3 tests/workflow_6/test_workflow_6.py
+
 echo 'Running internal rosdistro pytest suite...'
 (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest test/)
 
