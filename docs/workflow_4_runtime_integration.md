@@ -36,6 +36,14 @@ In [ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-i
 * Resolved `origin_distro` from the `rosdistro` repository structure dynamically and passed it to the ebuild generator.
 * Generated correct Gentoo Portage categories as `ros-${dep_distro}/${pkg}`.
 
+### 3.3. `ros_buildfarm` package naming
+In [common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py) and release job scripts:
+* Updated `get_os_package_name()` to accept `dist_file`.
+* If a package is from a binary imported repository, overrides the distribution prefix to its original `origin_distro` namespace.
+
+### 3.4. `rosinstall_generator` boundary resolution
+* Verified that generator functions like `get_package_names()`, `generate_rosinstall()`, and `get_recursive_dependencies()` recursively resolve dependencies across chained boundaries automatically without library modifications, since they rely on the updated `rosdistro` APIs.
+
 ---
 
 ## 4. Segregated Test Configs

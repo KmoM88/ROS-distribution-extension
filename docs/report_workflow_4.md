@@ -20,6 +20,13 @@ The main objective of Workflow 4 was to integrate the parsed Version 3/4 distrib
 - **Dynamic Origin Resolution** ([gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py)): Added a helper function `get_dep_distro(dep_name)` to extract the `origin_distro` release repository attribute parsed by `rosdistro` (inherited recursively from base distributions or overlays).
 - **Correct Ebuild Category Output** ([ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py)): Modified ebuild text generation loops to output package dependencies with their correct respective distribution namespaces (`ros-${dep_distro}/${pkg}`) rather than assuming the current derived distribution name for all internal dependencies.
 
+### C. `ros_buildfarm` (OS Package Naming & Job Setup)
+- **Support for Binary Imports** ([common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py)): Modified `get_os_package_name()` to accept a `dist_file` parameter. If a package is defined in a repository that was inherited via `binary_import`, it overrides the active distribution prefix to use its `origin_distro` prefix.
+- **Job Synchronization** ([release_job.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/release_job.py), [check_sync_criteria.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/scripts/release/check_sync_criteria.py), [status_page_input.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/status_page_input.py)): Updated all callers of `get_os_package_name()` to pass the active distribution file instance, ensuring that release sync and status pages recognize cross-distro package names correctly.
+
+### D. `rosinstall_generator` (Boundary Traversals)
+- **Boundary Verification**: Verified that standard dependency generation functions (e.g. `get_package_names()`, `generate_rosinstall()`, and `get_recursive_dependencies()`) resolve packages recursively across extends/overlay chains without requiring modification, since they delegate cache loading directly to `rosdistro`'s newly updated APIs.
+
 ---
 
 ## 3. Added Verification Tests
@@ -32,8 +39,11 @@ The integration test script [test_workflow_4.py](../tests/workflow_4/test_workfl
    - Asserts `ros-base/turtlesim` is present (resolving to the base distribution category).
    - Asserts `ros-derived_binary/new_package` is present (resolving to the derived distribution category).
 
-### B. Submodule Unit Test
-A new test case `test_cross_distro_depend` was added to `superflore`'s internal unit tests in [test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118) to verify category formatting in isolation.
+### B. Submodule Unit Tests
+We added unit test suites to verify these modifications in isolation inside each submodule:
+- **`superflore`** ([test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118)): Adds `test_cross_distro_depend` to verify dynamic category namespace resolution for Ebuilds.
+- **`ros_buildfarm`** ([test_package_naming.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/test/test_package_naming.py)): Adds `test_get_os_package_name_derived_binary` and `test_get_os_package_name_derived_source` to verify binary name prefixes for package imports vs. source rebuilds.
+- **`rosinstall_generator`** ([test_extends.py](https://github.com/KmoM88/rosinstall_generator/blob/feature/rep-2015-tool-integration/test/test_extends.py)): Adds tests verifying that generator functions fetch and resolve dependencies transparently over extends/overlay chains.
 
 ---
 

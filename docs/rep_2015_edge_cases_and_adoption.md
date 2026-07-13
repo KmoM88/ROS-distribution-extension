@@ -28,7 +28,9 @@ We implemented and verified all six workflows proposed to validate the REP-2015 
 * **Accomplishments**:
   * **`rosdep`**: Modified [gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py) to resolve packages inherited via `binary_import` to `ros-{parent}-{package}` and those via `source_rebuild` to `ros-{derived}-{package}`.
   * **`superflore`**: Modified [ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py) and [gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py) to parse package origins and output Portage categories as `ros-{origin_distro}/{pkg}` dynamically.
-* **Tests & Verification**: Verified using [test_workflow_4.py](../tests/workflow_4/test_workflow_4.py) and unit tests [test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118).
+  * **`ros_buildfarm`**: Modified [common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py) to translate OS package names based on the package's origin distribution for binary imports.
+  * **`rosinstall_generator`**: Verified that transitive dependency traversal maps across parent distribution chains seamlessly.
+* **Tests & Verification**: Verified using [test_workflow_4.py](../tests/workflow_4/test_workflow_4.py), Ebuild unit tests [test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118), and buildfarm naming tests [test_package_naming.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/test/test_package_naming.py).
 
 ### Workflow 5: Multiple Inheritance & Namespace Collision Warnings
 * **REP Requirement**: Support multiple parents and resolve ordering/collisions.
