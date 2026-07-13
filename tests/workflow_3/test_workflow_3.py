@@ -12,14 +12,16 @@ def test_workflow_3():
     print(f"Loading Workflow 3 index from: {index_url}")
     index = rosdistro.get_index(index_url)
     
-    # 1. Capture stdout to check for platform compatibility warning
+    # 1. Capture stdout and stderr to check for platform compatibility warning
     old_stdout = sys.stdout
-    sys.stdout = mystdout = StringIO()
+    old_stderr = sys.stderr
+    sys.stdout = sys.stderr = mystdout = StringIO()
     
     try:
         dist_file = rosdistro.get_distribution_file(index, 'derived')
     finally:
         sys.stdout = old_stdout
+        sys.stderr = old_stderr
         
     print("Verification output from stdout:")
     print(mystdout.getvalue())

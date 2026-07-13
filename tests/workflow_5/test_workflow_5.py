@@ -43,9 +43,10 @@ def test_workflow_5():
         # Reset caches to force re-parsing
         rosdep2.rosdistrohelper._RDCache.release_files = {}
         
-        # Redirect stdout to capture collision warnings
+        # Redirect stdout and stderr to capture collision warnings
         old_stdout = sys.stdout
-        sys.stdout = mystdout = io.StringIO()
+        old_stderr = sys.stderr
+        sys.stdout = sys.stderr = mystdout = io.StringIO()
         
         try:
             # 1. Test rosdep child loading and collision logs
@@ -53,6 +54,7 @@ def test_workflow_5():
             rosdep_child = get_gbprepo_as_rosdep_data('child')
         finally:
             sys.stdout = old_stdout
+            sys.stderr = old_stderr
             
         warnings = mystdout.getvalue()
         print("Captured Warnings:")
