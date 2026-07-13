@@ -6,7 +6,6 @@ This document details the development workflows, test specifications, and valida
 The primary objective of this project is to evaluate the implementability of REP-2015 across the ROS infrastructure ecosystem. This involves:
 - Identifying edge cases and functional limitations in the proposed specification.
 - Extending and modifying the upstream forks (`rosdistro`, `rosdep`, `rosinstall_generator`, `ros_buildfarm`, `bloom`, and `superflore`) to support the version 3 distribution schema.
-- Documenting the advances made in each fork and compiling a final report that highlights areas that are particularly difficult to implement or that clash with the underlying philosophy of the existing tools.
 
 > [!IMPORTANT]
 > **Branching & Container Policies**:
