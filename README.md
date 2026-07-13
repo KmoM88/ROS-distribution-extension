@@ -9,11 +9,11 @@ We successfully extended and validated the ROS distribution overlay infrastructu
 
 | Workflow | Description | Status & Reports |
 | :--- | :--- | :--- |
-| **Workflow 1** | Implemented the Version 3 distribution parser schema supporting `extends` and `dependencies` elements in `rosdistro`. | [Report](docs/report_workflow_1.md) \| [Tests](tests/workflow_1/) |
-| **Workflow 2** | Implemented distribution overlay merging (`merge_extends`) allowing derived distributions to inherit and override repositories and packages. | [Report](docs/report_workflow_2.md) \| [Tests](tests/workflow_2/) |
-| **Workflow 3** | Enforced target platform compatibility checks and recursive cycle/circular inheritance detection in `rosdistro`. | [Report](docs/report_workflow_3.md) \| [Tests](tests/workflow_3/) |
-| **Workflow 4** | Integrated package name and category translation across boundary layers for binary and source distribution methods in `rosdep`, `bloom`, and `superflore`. | [Report](docs/report_workflow_4.md) \| [Tests](tests/workflow_4/) |
-| **Workflow 5** | Supported multiple parents, DFS post-order precedence ordering, repository/package collision warning logs, and namespace re-mapping in `source_rebuild` chains. | [Report](docs/report_workflow_5.md) \| [Tests](tests/workflow_5/) |
+| **Workflow 1** | Established the development baseline workspace, configured tool forks as submodules, and set up the isolated Docker container testing environment. | [Report](docs/report_workflow_1.md) \| [Tests](tests/workflow_1/) |
+| **Workflow 2** | Evaluated baseline testing configurations to verify unmodified behavior of overlays (REP-143) and packaging tools inside the container. | [Report](docs/report_workflow_2.md) \| [Tests](tests/workflow_2/) |
+| **Workflow 3** | Implemented the Version 3 distribution file parser schema in `rosdistro` supporting `extends`/`dependencies`, recursive parent parsing, cyclic inheritance detection, and platform warnings. | [Report](docs/report_workflow_3.md) \| [Tests](tests/workflow_3/) |
+| **Workflow 4** | Integrated package name mapping and category translation across boundary layers for binary and source distribution methods in `rosdep`, `bloom`, and `superflore`. | [Report](docs/report_workflow_4.md) \| [Tests](tests/workflow_4/) |
+| **Workflow 5** | Enabled multiple parent inheritance, DFS post-order precedence ordering, collision warning checks, and namespace origin re-mapping in `source_rebuild` chains. | [Report](docs/report_workflow_5.md) \| [Tests](tests/workflow_5/) |
 | **Workflow 6** | Implemented minimal disk cache compilation in `rosdistro_build_cache` and recursive in-memory chained cache resolution in cache loaders. | [Report](docs/report_workflow_6.md) \| [Tests](tests/workflow_6/) |
 
 ---
