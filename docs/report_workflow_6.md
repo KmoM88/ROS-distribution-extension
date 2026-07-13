@@ -15,9 +15,9 @@ The main objective of Workflow 6 was to implement in-memory chained cache resolu
 ## 2. Submodule Modifications
 
 ### `rosdistro` (Recursive Cache Merging)
-- **Loader Interface** ([__init__.py](../submodules/kmom88-rosdistro/src/rosdistro/__init__.py)):
+- **Loader Interface** ([__init__.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/__init__.py)):
   - Updated `get_distribution_cache` to pass the active `index` parameter to the `DistributionCache` constructor.
-- **Recursive Merging** ([distribution_cache.py](../submodules/kmom88-rosdistro/src/rosdistro/distribution_cache.py)):
+- **Recursive Merging** ([distribution_cache.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_cache.py)):
   - Updated `DistributionCache.__init__` to accept the optional `index` parameter.
   - If `index` is provided and the loaded distribution extends other parents, the loader dynamically imports `get_distribution_cache` (avoiding circular dependency loops) and recursively loads the parent caches.
   - The parent cache's `distribution_file` keys, `release_package_xmls`, and `source_repo_package_xmls` are merged into the derived distribution cache instance. Child-level definitions are protected and take precedence over inherited base-level entries.
@@ -27,9 +27,9 @@ The main objective of Workflow 6 was to implement in-memory chained cache resolu
 ## 3. Added Verification Tests
 
 ### A. Isolated Unit Tests
-- Created mock cache files `base-cache.yaml` and `derived-cache.yaml` under `submodules/kmom88-rosdistro/test/files/extends/`.
+- Created mock cache files `base-cache.yaml` and `derived-cache.yaml` under [test/files/extends/](https://github.com/KmoM88/rosdistro/tree/feature/rep-2015-v3-parser/test/files/extends/).
 - Updated `index_extends.yaml` to specify cache locations.
-- Added `test_chained_cache_resolution` to the `rosdistro` unit test suite [test_extends.py](../submodules/kmom88-rosdistro/test/test_extends.py) to assert in-memory merging of parent caches and package XMLs.
+- Added `test_chained_cache_resolution` to the `rosdistro` unit test suite [test_extends.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/test/test_extends.py) to assert in-memory merging of parent caches and package XMLs.
 
 ### B. Segregated Integration Tests
 - Structure defined under `tests/workflow_6/`:

@@ -24,14 +24,14 @@ To ensure modifications to tool forks are tracked properly, the following featur
 ## 3. Code Modifications
 
 ### 3.1. `rosdep` package naming
-In [gbpdistro_support.py](../submodules/kmom88-rosdep/src/rosdep2/gbpdistro_support.py), modified package name resolution to parse `origin_distro` and `extension_method` from repository objects:
+In [gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py), modified package name resolution to parse `origin_distro` and `extension_method` from repository objects:
 * **For `binary_import`**:
   If the package is inherited from a parent distribution, resolve it to the original package name: `ros-{parent_distro}-{package}`.
 * **For `source_rebuild`**:
   Rebuilt packages are renamed to target the derived distribution name: `ros-{derived_distro}-{package}`.
 
 ### 3.2. `superflore` ebuild categories
-In [ebuild.py](../submodules/kmom88-superflore/superflore/generators/ebuild/ebuild.py) and [gen_packages.py](../submodules/kmom88-superflore/superflore/generators/ebuild/gen_packages.py):
+In [ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py) and [gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py):
 * Transitioned internal ebuild dependency tracker lists to dicts.
 * Resolved `origin_distro` from the `rosdistro` repository structure dynamically and passed it to the ebuild generator.
 * Generated correct Gentoo Portage categories as `ros-${dep_distro}/${pkg}`.

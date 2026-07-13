@@ -15,9 +15,9 @@ The purpose of Workflow 3 was to implement parsing support in `rosdistro` for ve
 All parsing, resolution, and warning verification logics were implemented in the `feature/rep-2015-v3-parser` branch in the `rosdistro` submodule:
 
 ### 2.1. Code Implementation Changes
-1. **Schema Support**: Modified [distribution_file.py](../submodules/kmom88-rosdistro/src/rosdistro/distribution_file.py) to support distribution files of format version `3`.
+1. **Schema Support**: Modified [distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py) to support distribution files of format version `3`.
 2. **Recursive Parent Resolution**:
-   - Implemented depth-first post-order recursive parsing of parent distributions inside [__init__.py](../submodules/kmom88-rosdistro/src/rosdistro/__init__.py).
+   - Implemented depth-first post-order recursive parsing of parent distributions inside [__init__.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/__init__.py).
    - Inherited repositories that are not overridden by the derived distribution file are merged dynamically.
 3. **Loop Detection**:
    - Tracks visited distributions in the recursion stack. If a cycle is detected, raises a custom `CircularInheritanceError`.
@@ -39,6 +39,6 @@ We verified the behavior of the modified parser inside the Docker container usin
 
 ## 4. Submodule Integration & GitHub Actions
 To ensure this functionality was validated continuously on the remote repository:
-- Added comprehensive unit tests inside the `rosdistro` submodule test suite [test_extends.py](../submodules/kmom88-rosdistro/test/test_extends.py).
+- Added comprehensive unit tests inside the `rosdistro` submodule test suite [test_extends.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/test/test_extends.py).
 - Modified the GitHub Actions configuration of the submodule to run this unit test suite on every PR and push.
 - Verified that all unit tests pass successfully in GitHub Actions.

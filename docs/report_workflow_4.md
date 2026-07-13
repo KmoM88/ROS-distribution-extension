@@ -16,9 +16,9 @@ The main objective of Workflow 4 was to integrate the parsed Version 3/4 distrib
 - **Rationale**: `bloom` delegates system dependency resolution entirely to `rosdep`'s API (e.g. calling `resolve_rosdep_key` and `get_view`). Since the `rosdep` submodule was already modified to handle the extends inheritance schema and apply name mapping/translation, `bloom` automatically resolves dependencies correctly under the hood without requiring any internal modifications.
 
 ### B. `superflore` (Gentoo Ebuild Generator)
-- **Dictionary Transition for Dependency Tracking** ([ebuild.py](../submodules/kmom88-superflore/superflore/generators/ebuild/ebuild.py)): Transitioned internal dependency attributes (`self.rdepends`, `self.depends`, `self.tdepends`) from lists to dictionaries. This allows mapping each package dependency to its corresponding origin distribution name dynamically.
-- **Dynamic Origin Resolution** ([gen_packages.py](../submodules/kmom88-superflore/superflore/generators/ebuild/gen_packages.py)): Added a helper function `get_dep_distro(dep_name)` to extract the `origin_distro` release repository attribute parsed by `rosdistro` (inherited recursively from base distributions or overlays).
-- **Correct Ebuild Category Output** ([ebuild.py](../submodules/kmom88-superflore/superflore/generators/ebuild/ebuild.py)): Modified ebuild text generation loops to output package dependencies with their correct respective distribution namespaces (`ros-${dep_distro}/${pkg}`) rather than assuming the current derived distribution name for all internal dependencies.
+- **Dictionary Transition for Dependency Tracking** ([ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py)): Transitioned internal dependency attributes (`self.rdepends`, `self.depends`, `self.tdepends`) from lists to dictionaries. This allows mapping each package dependency to its corresponding origin distribution name dynamically.
+- **Dynamic Origin Resolution** ([gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py)): Added a helper function `get_dep_distro(dep_name)` to extract the `origin_distro` release repository attribute parsed by `rosdistro` (inherited recursively from base distributions or overlays).
+- **Correct Ebuild Category Output** ([ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py)): Modified ebuild text generation loops to output package dependencies with their correct respective distribution namespaces (`ros-${dep_distro}/${pkg}`) rather than assuming the current derived distribution name for all internal dependencies.
 
 ---
 
@@ -33,7 +33,7 @@ The integration test script [test_workflow_4.py](../tests/workflow_4/test_workfl
    - Asserts `ros-derived_binary/new_package` is present (resolving to the derived distribution category).
 
 ### B. Submodule Unit Test
-A new test case `test_cross_distro_depend` was added to `superflore`'s internal unit tests in [test_ebuild.py](../submodules/kmom88-superflore/tests/test_ebuild.py#L110-L118) to verify category formatting in isolation.
+A new test case `test_cross_distro_depend` was added to `superflore`'s internal unit tests in [test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118) to verify category formatting in isolation.
 
 ---
 

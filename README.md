@@ -4,7 +4,7 @@ This repository serves as a validation test-bed and case study for [REP-2015 (RO
 
 ---
 
-## 🚀 Overview of Accomplishments
+## Overview of Accomplishments
 We successfully extended and validated the ROS distribution overlay infrastructure across six distinct workflows:
 
 | Workflow | Description | Status & Reports |
@@ -18,7 +18,7 @@ We successfully extended and validated the ROS distribution overlay infrastructu
 
 ---
 
-## 📦 Submodule Forks
+## Submodule Forks
 The modifications are integrated into the respective tool submodules. We maintain and test against the following forks:
 
 * **[rosdistro](https://github.com/KmoM88/rosdistro)**: Extended parser version 3 format, precedence rules, cyclic loops detection, collision warnings, and chained cache resolutions.
@@ -30,7 +30,7 @@ The modifications are integrated into the respective tool submodules. We maintai
 
 ---
 
-## 🛠️ Verification Suite
+## Verification Suite
 
 To validate the implementation in a clean, reproducible environment, we provide a containerized test suite that runs all submodule unit tests and integration tests.
 

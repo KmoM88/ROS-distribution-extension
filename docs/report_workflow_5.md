@@ -15,15 +15,15 @@ The main objective of Workflow 5 was to extend the Version 3 distribution parser
 ## 2. Submodule Modifications
 
 ### A. `rosdistro` (Parser Warnings and Re-mapping)
-- **Collision Checking** ([distribution_file.py](../submodules/kmom88-rosdistro/src/rosdistro/distribution_file.py)): 
+- **Collision Checking** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)): 
   - Checks if a repository or package being merged is already present in the active distribution.
   - If the repository or package was inherited from a previous parent, it prints a warning:
     `WARNING: Collision detected. Repository/Package '<name>' is defined in multiple parents ('<other_parent>' and '<parent_dist_file.name>'). Using definition from '<other_parent>'.`
-- **Origin Re-mapping** ([distribution_file.py](../submodules/kmom88-rosdistro/src/rosdistro/distribution_file.py)):
+- **Origin Re-mapping** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)):
   - If a package is inherited via `source_rebuild`, its `origin_distro` is overwritten to the current derived distribution name, ensuring downstream consumers prefix it as `ros-{derived}-{pkg}` instead of using the base namespace.
 
 ### B. `rosdep` (Editable Local Toggling)
-- **Dependency Override** ([setup.py](../submodules/kmom88-rosdep/setup.py)):
+- **Dependency Override** ([setup.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/setup.py)):
   - Added a conditional dependency check for `ROSDEP_LOCAL_DEV`. If set to `'true'`, it resolves `rosdistro` dependency normally (utilizing the local editable directory) instead of fetching the remote git repo branch directly.
 
 ---
@@ -31,7 +31,7 @@ The main objective of Workflow 5 was to extend the Version 3 distribution parser
 ## 3. Added Verification Tests
 
 ### A. Isolated Unit Tests
-- Added `test_multi_parent_precedence_and_collisions` to the `rosdistro` unit test suite [test_extends.py](../submodules/kmom88-rosdistro/test/test_extends.py).
+- Added `test_multi_parent_precedence_and_collisions` to the `rosdistro` unit test suite [test_extends.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/test/test_extends.py).
 
 ### B. Segregated Integration Tests
 - Structure defined under `tests/workflow_5/`:
