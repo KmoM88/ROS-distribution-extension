@@ -72,3 +72,30 @@ Implementing the extensions highlighted several key challenges that must be addr
 
 ### 3. Tool Release Synchronization
 * **Pain Point**: Because ROS tools (e.g., `rosdistro`, `rosdep`, `rosinstall_generator`, `bloom`) are decoupled and released independently, making a change to the index format requires a synchronized deployment sequence to prevent breaking package builds across the buildfarm.
+* **Resolution**: Backwards-compatible defaults (such as ignoring version 3 fields if the version is v1/v2) must be released first, followed by incremental opt-in migrations of the active indexes.
+
+---
+
+## 4. Omissions in the Proposed REP-2015 Specification
+
+Prototyping the extension mechanisms exposed several gaps and issues in the REP-2015 draft proposal that should be addressed before it is accepted as a standard:
+
+### 1. Loop Detection & Error Handling Specifications
+* **Omission**: The REP defines inheritance via `extends` but omits any requirements for cycle detection or error handling.
+* **Impact**: Without explicit loop detection, parser implementations will enter infinite recursion loops and crash when parsing circular extends lists (e.g., `distro_a` extends `distro_b` and vice versa).
+* **Recommendation**: The REP should mandate that parser implementations must validate the inheritance tree and throw a standard parsing exception (such as `CircularInheritanceError`) when circular dependencies are detected.
+
+### 2. Common Ancestor Collision Noise (Diamond Inheritance)
+* **Omission**: In a multiple inheritance layout (e.g., `child` extends `parent_a` and `parent_b`), if both parents extend the same base `root` distribution, they both inherit all baseline packages (like `std_msgs`). The collision warning engine flags these as conflicts.
+* **Impact**: Generates significant warning spam for common baseline packages, drowning out actual package name conflicts.
+* **Recommendation**: The REP should specify that collision warnings are suppressed if the duplicate definitions originate from the same `origin_distro` (common ancestor). Warnings should only be raised when different, conflicting repository definitions are introduced.
+
+### 3. Cache Invalidation and Stale Chained Caches
+* **Omission**: Chained caching keeps derived cache files on disk lightweight by merging parent caches in memory. However, the REP does not specify a cache invalidation policy.
+* **Impact**: If a package is updated in `base` and the base cache is regenerated, the derived cache file on disk has no mechanism to identify this change, leading to stale package metadata in consumer tools.
+* **Recommendation**: The REP should define a cache header hash map or index mapping that lists parent cache checksums to trigger automatic cache invalidation.
+
+### 4. System Dependencies vs. ROS Package Name Translation
+* **Omission**: The REP defines renaming rules for `source_rebuild` (`ros-{derived_distro}-{package}`) but does not differentiate between internal ROS packages and non-ROS system dependencies (e.g., `boost`, `python3-yaml`).
+* **Impact**: Downstream tools could attempt to apply name translation to system dependencies, looking for non-existent system packages like `ros-derived-boost`.
+* **Recommendation**: The REP must explicitly clarify that prefix name transformations only apply to ROS packages defined in the release repositories and must never be applied to system-level `rosdep` keys.
