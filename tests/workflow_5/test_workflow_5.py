@@ -9,8 +9,8 @@ from rosdep2.rosdistrohelper import get_index, get_release_file
 from rosdep2.gbpdistro_support import get_gbprepo_as_rosdep_data
 
 def test_workflow_5():
-    tests_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    index_path = os.path.join(tests_dir, "workflow_5", "index.yaml")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    index_path = os.path.join(script_dir, "index.yaml")
     index_url = f"file://{index_path}"
     
     print("#"*60)

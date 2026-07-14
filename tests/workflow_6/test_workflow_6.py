@@ -6,8 +6,7 @@ import yaml
 import rosdistro
 
 def test_workflow_6():
-    tests_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    workflow_dir = os.path.join(tests_dir, "workflow_6")
+    workflow_dir = os.path.dirname(os.path.abspath(__file__))
     index_path = os.path.join(workflow_dir, "index.yaml")
     index_url = f"file://{index_path}"
     

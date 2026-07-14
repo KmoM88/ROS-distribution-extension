@@ -5,8 +5,8 @@ import rosdistro
 from rosdistro import CircularInheritanceError
 
 def test_workflow_3():
-    tests_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    index_path = os.path.join(tests_dir, "workflow_3", "index.yaml")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    index_path = os.path.join(script_dir, "index.yaml")
     index_url = f"file://{index_path}"
     
     print("#"*60)

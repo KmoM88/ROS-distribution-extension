@@ -15,8 +15,7 @@ from superflore.generators.ebuild.gen_packages import _gen_ebuild_for_package
 from unittest.mock import MagicMock
 
 def test_workflow_7():
-    tests_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    workflow_dir = os.path.join(tests_dir, "workflow_7")
+    workflow_dir = os.path.dirname(os.path.abspath(__file__))
     index_path = os.path.join(workflow_dir, "index.yaml")
     index_url = f"file://{index_path}"
     
