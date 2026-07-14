@@ -6,7 +6,9 @@ def test_workflow_2():
     index_path = os.path.join(tests_dir, "workflow_2", "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 2 index from: {index_url}")
+    print("#"*60)
     index = rosdistro.get_index(index_url)
     
     assert index.version == 3

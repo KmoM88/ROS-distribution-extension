@@ -11,7 +11,10 @@ def test_workflow_6():
     index_path = os.path.join(workflow_dir, "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 6 index from: {index_url}")
+    print("#"*60)
+
     
     # 1. Clean existing cache files
     for name in ['base-cache.yaml', 'base-cache.yaml.gz', 'derived-cache.yaml', 'derived-cache.yaml.gz']:

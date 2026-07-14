@@ -13,7 +13,10 @@ def test_workflow_5():
     index_path = os.path.join(tests_dir, "workflow_5", "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 5 index from: {index_url}")
+    print("#"*60)
+
     os.environ['ROSDISTRO_INDEX_URL'] = index_url
     
     # 0. Setup isolated rosdep environment

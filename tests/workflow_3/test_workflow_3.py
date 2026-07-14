@@ -9,7 +9,9 @@ def test_workflow_3():
     index_path = os.path.join(tests_dir, "workflow_3", "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 3 index from: {index_url}")
+    print("#"*60)
     index = rosdistro.get_index(index_url)
     
     # 1. Capture stdout and stderr to check for platform compatibility warning

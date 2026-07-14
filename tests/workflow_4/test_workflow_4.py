@@ -12,7 +12,10 @@ def test_workflow_4():
     index_path = os.path.join(tests_dir, "workflow_4", "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 4 index from: {index_url}")
+    print("#"*60)
+
     # Force rosdistro and rosdep helper to use this index URL
     os.environ['ROSDISTRO_INDEX_URL'] = index_url
     

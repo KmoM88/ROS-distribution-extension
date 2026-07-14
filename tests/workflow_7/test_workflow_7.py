@@ -20,7 +20,9 @@ def test_workflow_7():
     index_path = os.path.join(workflow_dir, "index.yaml")
     index_url = f"file://{index_path}"
     
+    print("#"*60)
     print(f"Loading Workflow 7 index from: {index_url}")
+    print("#"*60)
     os.environ['ROSDISTRO_INDEX_URL'] = index_url
     
     # 1. Clean existing cache files
