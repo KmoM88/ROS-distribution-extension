@@ -19,3 +19,13 @@
 [submodule "submodules/kmom88-superflore"]
 	path = submodules/kmom88-superflore
 	url = git@github.com:KmoM88/superflore.git
+[submodule "submodules/gazebodistro"]
+	path = submodules/gazebodistro
+	url = https://github.com/gazebo-tooling/gazebodistro.git
+	branch = jrivero/jetty-rosdistro
+[submodule "submodules/ros-rosdistro"]
+	path = submodules/ros-rosdistro
+	url = https://github.com/KmoM88/ros-rosdistro.git
+[submodule "submodules/test-rosdistro-rep2015"]
+	path = submodules/test-rosdistro-rep2015
+	url = https://github.com/KmoM88/test-rosdistro-rep2015.git
