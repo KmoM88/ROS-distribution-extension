@@ -10,7 +10,7 @@ The main objective of Workflow 9 is to establish a real-world integration where 
 
 1. **Submodule Integration**:
    - Upstream Gazebo distribution: `submodules/gazebodistro` (branch `jrivero/jetty-rosdistro`).
-   - Downstream ROS distribution: `submodules/ros-rosdistro` (user fork containing `lyrical/distribution.yaml`).
+   - Downstream ROS distribution: `submodules/ros-rosdistro` (branch `feature/rep-2015-jetty-extension` containing `lyrical/distribution.yaml`).
 2. **Direct Downstream Extension**:
    - `submodules/ros-rosdistro/lyrical/distribution.yaml` directly extends `jetty` via `source_rebuild` without needing an intermediate overlay distribution.
 3. **Repository Specification Merging**:

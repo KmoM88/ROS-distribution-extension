@@ -26,6 +26,7 @@
 [submodule "submodules/ros-rosdistro"]
 	path = submodules/ros-rosdistro
 	url = https://github.com/KmoM88/ros-rosdistro.git
+	branch = feature/rep-2015-jetty-extension
 [submodule "submodules/test-rosdistro-rep2015"]
 	path = submodules/test-rosdistro-rep2015
 	url = https://github.com/KmoM88/test-rosdistro-rep2015.git
