@@ -21,32 +21,54 @@ To ensure modifications to tool forks are tracked properly, the following featur
 
 ---
 
-## 3. Code Modifications
+---
 
-### 3.1. `rosdep` package naming
-In [gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py), modified package name resolution to parse `origin_distro` and `extension_method` from repository objects:
-* **For `binary_import`**:
-  If the package is inherited from a parent distribution, resolve it to the original package name: `ros-{parent_distro}-{package}`.
-* **For `source_rebuild`**:
-  Rebuilt packages are renamed to target the derived distribution name: `ros-{derived_distro}-{package}`.
+## 3. Architecture Requirement: Centralized Binary Package Naming in `rosdistro`
 
-### 3.2. `superflore` ebuild categories
+Under REP-2015, distribution extensions require dynamic binary packaging rules (`binary_import`, `source_rebuild`, non-ROS ecosystems like Gazebo, custom prefix templates, and explicit package overrides).
+
+To prevent fragmented and conflicting naming logic across client tools (`rosdep`, `ros_buildfarm`, `bloom`, `superflore`), **`rosdistro` is established as the single source of truth** for computing OS binary package names:
+
+### 3.1. Requirements & Naming Rules
+1. **Standard ROS Distributions (`distribution_type: ros1 / ros2`)**:
+   Formats packages following standard OS Debian/RPM naming: `ros-{target_distro}-{pkg_name.replace('_', '-')}`.
+2. **`binary_import` Resolution**:
+   Packages inherited via `binary_import` retain their parent's origin distribution name: `ros-{origin_distro}-{pkg_name}`.
+3. **`source_rebuild` Resolution**:
+   Packages rebuilt into the child distribution target the child's distribution namespace: `ros-{derived_distro}-{pkg_name}`.
+4. **Non-ROS / Standalone Distributions**:
+   Distributions with non-ROS distribution types (e.g. `distribution_type: gazebo`) return the native package name unchanged (no-op case, e.g. `gz-sim10`).
+5. **Custom Prefix Templates**:
+   Supports custom formatting via `binary_prefix_template` in the distribution or repository definition (e.g. `"{distro_name}-{package_name}"`).
+6. **Explicit Overrides**:
+   Supports per-package binary naming overrides declared via `binary_name` mappings in `ReleaseRepositorySpecification`.
+
+---
+
+## 4. Code Modifications & Toolchain Delegation
+
+### 4.1. `rosdistro` (Source of Truth Engine)
+* **`ReleaseRepositorySpecification`** ([release_repository_specification.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/release_repository_specification.py)): Added `get_binary_package_name(pkg_name)` evaluating distribution types, prefix templates, origin distros, and explicit overrides.
+* **`DistributionFile`** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)): Added `get_binary_package_name(pkg_name)` helper and updated `merge_extends()` to propagate naming templates and origin distros across parent chains.
+
+### 4.2. `rosdep` Delegation
+* In [gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py): Replaced hardcoded string formatting by calling `repo.release_repository.get_binary_package_name(pkg)` directly from `rosdistro` (with graceful fallback for older `rosdistro` versions).
+
+### 4.3. `ros_buildfarm` Delegation
+* In [common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py): Updated `get_os_package_name(rosdistro_name, package_name, dist_file)` to delegate directly to `dist_file.get_binary_package_name(package_name)`.
+
+### 4.4. `superflore` ebuild categories
 In [ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py) and [gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py):
 * Transitioned internal ebuild dependency tracker lists to dicts.
 * Resolved `origin_distro` from the `rosdistro` repository structure dynamically and passed it to the ebuild generator.
 * Generated correct Gentoo Portage categories as `ros-${dep_distro}/${pkg}`.
 
-### 3.3. `ros_buildfarm` package naming
-In [common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py) and release job scripts:
-* Updated `get_os_package_name()` to accept `dist_file`.
-* If a package is from a binary imported repository, overrides the distribution prefix to its original `origin_distro` namespace.
-
-### 3.4. `rosinstall_generator` boundary resolution
+### 4.5. `rosinstall_generator` boundary resolution
 * Verified that generator functions like `get_package_names()`, `generate_rosinstall()`, and `get_recursive_dependencies()` recursively resolve dependencies across chained boundaries automatically without library modifications, since they rely on the updated `rosdistro` APIs.
 
 ---
 
-## 4. Segregated Test Configs
+## 5. Segregated Test Configs
 Tests for Workflow 4 are located under the `tests/workflow_4/` directory:
 
 * **Index**: [tests/workflow_4/index.yaml](../tests/workflow_4/index.yaml) (defines `base`, `derived_binary`, and `derived_source` distributions).
@@ -56,7 +78,7 @@ Tests for Workflow 4 are located under the `tests/workflow_4/` directory:
 
 ---
 
-## 5. Verification Commands Run inside Container
+## 6. Verification Commands Run inside Container
 The tests are executed inside the isolated `ubuntu:noble` container using `docker/run_tests.sh`:
 
 ```bash

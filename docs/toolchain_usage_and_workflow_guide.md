@@ -37,9 +37,9 @@ graph TD
 
 | Tool | Core Responsibility under REP-2015 |
 | :--- | :--- |
-| **`rosdistro`** | **Distribution Definition & Cache Chaining**: Parses Version 3 distribution files, verifies inheritance hierarchies (detects cycles, checks platform compatibility), merges repository metadata, and loads chained multi-tier caches dynamically in memory. |
+| **`rosdistro`** | **Distribution Definition, Cache Chaining & Binary Naming**: Parses Version 3 distribution files, verifies inheritance hierarchies (detects cycles, checks platform compatibility), merges repository metadata, provides centralized binary package name formatting, and loads chained multi-tier caches dynamically in memory. |
 | **`rosinstall_generator`** | **Cross-Distribution Source Workspace Generation**: Inspects distribution chains to resolve Git repositories, branches, and release tags across distro boundaries to generate `.rosinstall` and `.repos` manifests. |
-| **`rosdep`** | **Dependency & Binary Package Resolution**: Translates ROS package names into underlying OS package manager names (`apt`, `dnf`), applying distribution prefix rules based on the extension method (`source_rebuild` vs `binary_import`). |
+| **`rosdep`** | **Dependency & Binary Package Resolution**: Translates ROS package names into underlying OS package manager names (`apt`, `dnf`), querying `rosdistro`'s centralized naming engine to resolve binary names based on the extension method (`source_rebuild` vs `binary_import`). |
 | **`vcstool`** | **Source Checkout**: Reads generated `.rosinstall` manifests and clones repositories into the local `src/` directory. |
 | **`colcon`** | **Compilation & Installation**: Builds the source workspace and generates local overlay environment setup scripts (`setup.bash`). |
 
@@ -155,14 +155,15 @@ rosdep resolve gz-sim --rosdistro lyrical --os=ubuntu:resolute
 ```
 
 * **What `rosdep` does**:
-  * **Under `source_rebuild`**:
-    * Packages rebuilt into the downstream environment are renamed with the downstream prefix:
-      * `std_msgs` $\rightarrow$ `ros-lyrical-std-msgs`
-      * `ros_gz_sim` $\rightarrow$ `ros-lyrical-ros-gz-sim`
-  * **Under `binary_import`**:
-    * Packages imported from the base distribution retain their original upstream binary name:
-      * `std_msgs` $\rightarrow$ `ros-jetty-std-msgs` (installed into `/opt/ros/jetty`)
-    * Disallows child distributions from overriding parent packages to preserve ABI compatibility.
+  * Queries `rosdistro`'s `get_binary_package_name()` engine to resolve OS package names:
+    * **Under `source_rebuild`**:
+      * Packages rebuilt into the downstream environment are renamed with the downstream prefix:
+        * `std_msgs` $\rightarrow$ `ros-lyrical-std-msgs`
+        * `ros_gz_sim` $\rightarrow$ `ros-lyrical-ros-gz-sim`
+    * **Under `binary_import`**:
+      * Packages imported from the base distribution retain their original upstream binary name:
+        * `std_msgs` $\rightarrow$ `ros-jetty-std-msgs` (installed into `/opt/ros/jetty`)
+      * Disallows child distributions from overriding parent packages to preserve ABI compatibility.
   * **System Dependencies**:
     * Resolves generic C++ libraries (`libboost-dev`, `tinyxml2`, `cmake`) using OS package manager rules.
 

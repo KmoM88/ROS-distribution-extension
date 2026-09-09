@@ -9,26 +9,35 @@ The main objective of Workflow 4 was to integrate the parsed Version 3/4 distrib
 
 ---
 
-## 2. Submodule Implementation & Changes
+## 2. Submodule Implementation & Architecture Changes
 
-### A. `rosdep` (System Dependency Resolution)
-- **Extends-Aware Naming Resolution** ([gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py)): Updated package name resolution to parse the `origin_distro` and `extension_method` attributes from repository objects recursively.
-- **Dynamic Binary Aliasing**: Packages inherited via `binary_import` are resolved to their parent binary packages (`ros-{parent_distro}-{package}`), while packages inherited via `source_rebuild` are correctly renamed to target the active derived distribution (`ros-{derived_distro}-{package}`).
+### A. `rosdistro` (Centralized Binary Package Naming Engine)
+- **Central Source of Truth** ([release_repository_specification.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/release_repository_specification.py)): Added `get_binary_package_name(pkg_name)` method directly on `ReleaseRepositorySpecification`.
+- **Comprehensive Naming Rules**:
+  - Standard ROS distributions (`ros1`/`ros2`) generate OS package names as `ros-{distro}-{pkg}` (with underscore-to-dash normalization).
+  - Preserves base binary package names for `binary_import` repositories (`ros-{parent_distro}-{package}`).
+  - Maps rebuilt packages to the child distribution namespace for `source_rebuild` (`ros-{derived_distro}-{package}`).
+  - Supports non-ROS distributions (e.g. `distribution_type: gazebo`), returning native package names without prepending ROS prefixes (no-op case).
+  - Supports custom prefix templates (`binary_prefix_template`) and per-package explicit overrides (`binary_name`).
+- **Distribution File Integration** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)): Added `get_binary_package_name(pkg_name)` helper and updated `merge_extends()` to propagate naming templates and repository origin attributes across multi-tier parent chains.
 
-### B. `bloom` (Debian/RPM Releases)
+### B. `rosdep` (System Dependency Resolution)
+- **Delegation to `rosdistro`** ([gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py)): Refactored package name resolution in `gbprepo_to_rosdep_data()` to delegate directly to `repo.release_repository.get_binary_package_name(pkg)` provided by `rosdistro`, with backward-compatible fallback. This eliminates redundant, tool-specific string formatting logic.
+
+### C. `bloom` (Debian/RPM Releases)
 - **Code Changes**: None.
-- **Rationale**: `bloom` delegates system dependency resolution entirely to `rosdep`'s API (e.g. calling `resolve_rosdep_key` and `get_view`). Since the `rosdep` submodule was already modified to handle the extends inheritance schema and apply name mapping/translation, `bloom` automatically resolves dependencies correctly under the hood without requiring any internal modifications.
+- **Rationale**: `bloom` delegates system dependency resolution entirely to `rosdep`'s API (e.g. calling `resolve_rosdep_key` and `get_view`). Because `rosdep` resolves binary names directly from `rosdistro`, `bloom` automatically resolves Debian/RPM dependencies across `binary_import` and `source_rebuild` boundaries without internal modifications.
 
-### C. `superflore` (Gentoo Ebuild Generator)
+### D. `superflore` (Gentoo Ebuild Generator)
 - **Dictionary Transition for Dependency Tracking** ([ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py)): Transitioned internal dependency attributes (`self.rdepends`, `self.depends`, `self.tdepends`) from lists to dictionaries. This allows mapping each package dependency to its corresponding origin distribution name dynamically.
 - **Dynamic Origin Resolution** ([gen_packages.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/gen_packages.py)): Added a helper function `get_dep_distro(dep_name)` to extract the `origin_distro` release repository attribute parsed by `rosdistro` (inherited recursively from base distributions or overlays).
 - **Correct Ebuild Category Output** ([ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/superflore/generators/ebuild/ebuild.py)): Modified ebuild text generation loops to output package dependencies with their correct respective distribution namespaces (`ros-${dep_distro}/${pkg}`) rather than assuming the current derived distribution name for all internal dependencies.
 
-### C. `ros_buildfarm` (OS Package Naming & Job Setup)
-- **Support for Binary Imports** ([common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py)): Modified `get_os_package_name()` to accept a `dist_file` parameter. If a package is defined in a repository that was inherited via `binary_import`, it overrides the active distribution prefix to use its `origin_distro` prefix.
+### E. `ros_buildfarm` (OS Package Naming & Job Setup)
+- **Delegation to `rosdistro`** ([common.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/common.py)): Updated `get_os_package_name()` to accept `dist_file` and delegate directly to `dist_file.get_binary_package_name()`.
 - **Job Synchronization** ([release_job.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/release_job.py), [check_sync_criteria.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/scripts/release/check_sync_criteria.py), [status_page_input.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/ros_buildfarm/status_page_input.py)): Updated all callers of `get_os_package_name()` to pass the active distribution file instance, ensuring that release sync and status pages recognize cross-distro package names correctly.
 
-### D. `rosinstall_generator` (Boundary Traversals)
+### F. `rosinstall_generator` (Boundary Traversals)
 - **Boundary Verification**: Verified that standard dependency generation functions (e.g. `get_package_names()`, `generate_rosinstall()`, and `get_recursive_dependencies()`) resolve packages recursively across extends/overlay chains without requiring modification, since they delegate cache loading directly to `rosdistro`'s newly updated APIs.
 
 ---
@@ -45,6 +54,7 @@ The integration test script [test_workflow_4.py](../tests/workflow_4/test_workfl
 
 ### B. Submodule Unit Tests
 We added unit test suites to verify these modifications in isolation inside each submodule:
+- **`rosdistro`** ([test_binary_naming.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/test/test_binary_naming.py)): Added comprehensive test suite verifying standard ROS prefix formatting, `binary_import` origin retention, `source_rebuild` renaming, non-ROS no-op naming, custom prefix templates, and explicit `binary_name` overrides (12/12 test cases passing).
 - **`superflore`** ([test_ebuild.py](https://github.com/KmoM88/superflore/blob/feature/rep-2015-tool-integration/tests/test_ebuild.py#L110-L118)): Adds `test_cross_distro_depend` to verify dynamic category namespace resolution for Ebuilds.
 - **`ros_buildfarm`** ([test_package_naming.py](https://github.com/KmoM88/ros_buildfarm/blob/feature/rep-2015-tool-integration/test/test_package_naming.py)): Adds `test_get_os_package_name_derived_binary` and `test_get_os_package_name_derived_source` to verify binary name prefixes for package imports vs. source rebuilds.
 - **`rosinstall_generator`** ([test_extends.py](https://github.com/KmoM88/rosinstall_generator/blob/feature/rep-2015-tool-integration/test/test_extends.py)): Adds tests verifying that generator functions fetch and resolve dependencies transparently over extends/overlay chains.

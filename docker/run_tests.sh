@@ -62,7 +62,7 @@ run_submodules() {
     (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest test/)
 
     echo 'Running internal rosdep pytest suite...'
-    (export PATH=/workspace/.venv/bin:\$PATH && cd submodules/kmom88-rosdep && ../../.venv/bin/pytest test/)
+    (export PATH=/workspace/.venv/bin:\$PATH && cd submodules/kmom88-rosdep && ../../.venv/bin/pytest -m 'not online' test/)
 
     echo 'Running internal rosinstall_generator pytest suite...'
     (cd submodules/kmom88-rosinstall_generator && ../../.venv/bin/pytest test/)
