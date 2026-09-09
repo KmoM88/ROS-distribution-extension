@@ -23,33 +23,43 @@ To ensure modifications to tool forks are tracked properly, the following featur
 
 ---
 
-## 3. Architecture Requirement: Centralized Binary Package Naming in `rosdistro`
+## 3. Architecture Requirement: Generic Binary Package Name Transformation in `rosdistro`
 
 Under REP-2015, distribution extensions require dynamic binary packaging rules (`binary_import`, `source_rebuild`, non-ROS ecosystems like Gazebo, custom prefix templates, and explicit package overrides).
 
-To prevent fragmented and conflicting naming logic across client tools (`rosdep`, `ros_buildfarm`, `bloom`, `superflore`), **`rosdistro` is established as the single source of truth** for computing OS binary package names:
+To prevent fragmented and conflicting naming logic across client tools (`rosdep`, `ros_buildfarm`, `bloom`, `superflore`), **`rosdistro` is established as the single source of truth** for computing OS binary package names using an ecosystem-agnostic transformation model:
 
-### 3.1. Requirements & Naming Rules
-1. **Standard ROS Distributions (`distribution_type: ros1 / ros2`)**:
-   Formats packages following standard OS Debian/RPM naming: `ros-{target_distro}-{pkg_name.replace('_', '-')}`.
-2. **`binary_import` Resolution**:
-   Packages inherited via `binary_import` retain their parent's origin distribution name: `ros-{origin_distro}-{pkg_name}`.
-3. **`source_rebuild` Resolution**:
-   Packages rebuilt into the child distribution target the child's distribution namespace: `ros-{derived_distro}-{pkg_name}`.
-4. **Non-ROS / Standalone Distributions**:
-   Distributions with non-ROS distribution types (e.g. `distribution_type: gazebo`) return the native package name unchanged (no-op case, e.g. `gz-sim10`).
-5. **Custom Prefix Templates**:
-   Supports custom formatting via `binary_prefix_template` in the distribution or repository definition (e.g. `"{distro_name}-{package_name}"`).
-6. **Explicit Overrides**:
-   Supports per-package binary naming overrides declared via `binary_name` mappings in `ReleaseRepositorySpecification`.
+### 3.1. Requirements & Transformation Model
+1. **Generic Prefix Template (`binary_prefix`)**:
+   - Standard ROS distributions default to `"ros-{DISTRO}-"` with standard package underscore-to-dash normalization (e.g., `std_msgs` $\rightarrow$ `ros-rolling-std-msgs`).
+   - Standalone distributions (e.g. Gazebo `jetty`) or `extends` declarations specify `binary_prefix: ""` to disable prefixes and preserve native package names (e.g. `gz-sim10`, `gz-cmake5`).
+2. **Sequential Regular Expression Rules (`binary_name_rules`)**:
+   - Supports a list of regex search-and-replace rules executed in sequence:
+     ```yaml
+     binary_name_rules:
+       - search: "_"
+         replace: "-"
+       - search: "^(.*)$"
+         replace: "ros-{DISTRO}-\\1"
+     ```
+3. **Template Variable Interpolation**:
+   - `{DISTRO}` / `{distro}`: Target distribution name (normalized).
+   - `{PACKAGE}` / `{package}`: Source package name (normalized).
+   - `{ORIGIN_DISTRO}` / `{origin_distro}`: Origin parent distribution name (for `binary_import`).
+4. **Reverse Binary Alias Resolution**:
+   - Provides `get_package_name_from_binary(binary_name)` on `DistributionFile` via deterministic in-memory lookup table and prefix-stripping fallback.
+5. **`binary_import` Resolution**:
+   - Inherits and evaluates the parent distribution's binary naming rules: `ros-{origin_distro}-{pkg_name}`.
+6. **`source_rebuild` Resolution**:
+   - Rebuilt packages target the child distribution's prefix or rules: `ros-{derived_distro}-{pkg_name}`.
 
 ---
 
 ## 4. Code Modifications & Toolchain Delegation
 
 ### 4.1. `rosdistro` (Source of Truth Engine)
-* **`ReleaseRepositorySpecification`** ([release_repository_specification.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/release_repository_specification.py)): Added `get_binary_package_name(pkg_name)` evaluating distribution types, prefix templates, origin distros, and explicit overrides.
-* **`DistributionFile`** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)): Added `get_binary_package_name(pkg_name)` helper and updated `merge_extends()` to propagate naming templates and origin distros across parent chains.
+* **`ReleaseRepositorySpecification`** ([release_repository_specification.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/release_repository_specification.py)): Implemented `get_binary_package_name(pkg_name)` evaluating explicit overrides, sequential `binary_name_rules`, prefix templates (`binary_prefix`), and variable substitutions.
+* **`DistributionFile`** ([distribution_file.py](https://github.com/KmoM88/rosdistro/blob/feature/rep-2015-v3-parser/src/rosdistro/distribution_file.py)): Added `get_binary_package_name(pkg_name)`, `get_package_name_from_binary(binary_name)`, and updated `merge_extends()` to propagate `binary_prefix` and `binary_name_rules` down parent chains.
 
 ### 4.2. `rosdep` Delegation
 * In [gbpdistro_support.py](https://github.com/KmoM88/rosdep/blob/feature/rep-2015-tool-integration/src/rosdep2/gbpdistro_support.py): Replaced hardcoded string formatting by calling `repo.release_repository.get_binary_package_name(pkg)` directly from `rosdistro` (with graceful fallback for older `rosdistro` versions).

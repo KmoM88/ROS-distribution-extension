@@ -1,6 +1,7 @@
 [submodule "submodules/reps"]
 	path = submodules/reps
-	url = git@github.com:openrobotics/reps.git
+	url = git@github.com:KmoM88/reps.git
+	branch = feature/rep-2015-binary-name-transformation
 [submodule "submodules/kmom88-rosdistro"]
 	path = submodules/kmom88-rosdistro
 	url = git@github.com:KmoM88/rosdistro.git

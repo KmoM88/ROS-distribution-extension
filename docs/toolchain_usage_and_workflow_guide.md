@@ -164,6 +164,11 @@ rosdep resolve gz-sim --rosdistro lyrical --os=ubuntu:resolute
       * Packages imported from the base distribution retain their original upstream binary name:
         * `std_msgs` $\rightarrow$ `ros-jetty-std-msgs` (installed into `/opt/ros/jetty`)
       * Disallows child distributions from overriding parent packages to preserve ABI compatibility.
+    * **Generic Prefix & Regex Transformations (`binary_prefix` / `binary_name_rules`)**:
+      * When `binary_prefix` is customized (e.g. `binary_prefix: ""` in `extends` for Gazebo `jetty`), `gz-sim` resolves to native Debian/RPM name `gz-sim` instead of `ros-jetty-gz-sim`.
+      * Custom distributions can define regex search-and-replace rules under `binary_name_rules` (e.g. `search: '^ros-(.*)$'`, `replace: 'vendor-{DISTRO}-\\1'`).
+      * Supports template variable interpolation: `{DISTRO}`, `{PACKAGE}`, and `{ORIGIN_DISTRO}`.
+      * Reverse lookups are available via `distribution_file.get_package_name_from_binary(binary_name)`.
   * **System Dependencies**:
     * Resolves generic C++ libraries (`libboost-dev`, `tinyxml2`, `cmake`) using OS package manager rules.
 

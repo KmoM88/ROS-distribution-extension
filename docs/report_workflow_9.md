@@ -55,6 +55,7 @@ version: 3
 extends:
   - distro_name: jetty
     extension_method: source_rebuild
+    binary_prefix: ""
 release_platforms:
   debian:
   - trixie
@@ -67,6 +68,9 @@ release_platforms:
 repositories:
   ...
 ```
+
+> [!NOTE]
+> Declaring `binary_prefix: ""` within the downstream `extends` definition allows `lyrical` to customize binary package naming for upstream packages without modifying the upstream `gazebodistro` repository.
 
 ---
 

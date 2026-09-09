@@ -64,9 +64,13 @@ release_platforms:
 extends:
   - distro_name: jetty
     extension_method: source_rebuild
+    binary_prefix: ""
 repositories:
   # Contains all standard ROS 2 Lyrical packages (e.g., std_msgs, turtlesim)
 ```
+
+> [!NOTE]
+> Setting `binary_prefix: ""` in the `extends` entry ensures that Gazebo packages from `jetty` are transformed without a default `ros-{distro}-` prefix when desired, without requiring any modifications to upstream `gazebodistro` files.
 
 ---
 
