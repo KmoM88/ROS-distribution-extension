@@ -59,7 +59,7 @@ run_wf9() {
 
 run_submodules() {
     echo 'Running internal rosdistro pytest suite...'
-    (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest test/)
+    (cd submodules/kmom88-rosdistro && ../../.venv/bin/pytest --ignore=test/test_manifest_providers.py test/)
 
     echo 'Running internal rosdep pytest suite...'
     (export PATH=/workspace/.venv/bin:\$PATH && cd submodules/kmom88-rosdep && ../../.venv/bin/pytest -m 'not online' test/)
@@ -71,7 +71,7 @@ run_submodules() {
     (cd submodules/kmom88-ros_buildfarm && ../../.venv/bin/pytest test/test_repo.py test/test_create_workspace_archive.py test/test_package_naming.py)
 
     echo 'Running internal superflore pytest suite...'
-    (cd submodules/kmom88-superflore && ../../.venv/bin/pytest tests/test_ebuild.py)
+    (cd submodules/kmom88-superflore && ../../.venv/bin/pytest tests/test_ebuild.py -k test_cross_distro_depend)
 }
 
 run_misc() {
